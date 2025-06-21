@@ -1,14 +1,17 @@
 
-const createError = require('http-errors'),
-	 		express = require('express'),
-	 		path = require('path'),
+const createError  = require('http-errors'),
+	 		express 		 = require('express'),
+	 		path 				 = require('path'),
 	 		cookieParser = require('cookie-parser'),
-	 		logger = require('morgan'),
-	 		connectDB = require('./config/db')
+	 		logger 			 = require('morgan'),
+	 		connectDB 	 = require('./config/db'),
+			cors 				 = require('cors');
 
 const authRouter = require('./routes/auth');
 
 const app = express();
+
+
 
 //conectando a la base de datos
 connectDB();
@@ -22,7 +25,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true,  // si usas cookies o headers de autenticación
+}));
 
 //endpoints
 app.use('/api/auth', authRouter);
